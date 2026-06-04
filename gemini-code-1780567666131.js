@@ -1,0 +1,61 @@
+// Liste globale de toutes tes équipes inscrites (à adapter selon ton code)
+const toutesLesEquipes = [
+  "a. / o.", "mamn / papa", "pablo / lucas", "zeumel / zeubi", 
+  "whilaim / valouz", "macron / bardella", "marco / camille", "robin / adiren",
+  "marie / charlotte", "cyrol / clemence", "mae / oscar", "maelys / paul",
+  "romane / adele", "thomas / edouard", "matteo / marceli", "aurian / gauthier"
+];
+
+/**
+ * Génère le composant HTML d'une équipe sous forme de menu déroulant
+ * @param {string} equipeSelectionnee - L'équipe actuellement calculée pour ce slot
+ * @return {string} - Chaîne HTML du <select>
+ */
+function creerMenuDeroulantEquipe(equipeSelectionnee) {
+  let html = `<select class="select-equipe" onchange="gererChangementManuel(this)">`;
+  
+  // Option vide si le match n'est pas encore déterminé
+  const estVide = (!equipeSelectionnee || equipeSelectionnee === "---" || equipeSelectionnee === "Exempt");
+  html += `<option value="" ${estVide ? 'selected' : ''}>---</option>`;
+  
+  // Si l'équipe est "Exempt", on l'ajoute comme option temporaire
+  if (equipeSelectionnee === "Exempt") {
+    html += `<option value="Exempt" selected>Exempt</option>`;
+  }
+
+  // Boucle sur toutes les équipes pour créer les options du menu
+  toutesLesEquipes.forEach(equipe => {
+    const estChoisie = (equipe === equipeSelectionnee);
+    html += `<option value="${equipe}" ${estChoisie ? 'selected' : ''}>${equipe}</option>`;
+  });
+
+  html += `</select>`;
+  return html;
+}
+
+/**
+ * Exemple de fonction qui génère un bloc de match (Node)
+ */
+function genererBlocMatch(equipe1, equipe2, score1 = "", score2 = "") {
+  return `
+    <div class="match-box">
+      <div class="equipe-slot">
+        ${creerMenuDeroulantEquipe(equipe1)}
+        <input type="number" class="score-input" value="${score1}" placeholder="0">
+      </div>
+      <div class="equipe-slot">
+        ${creerMenuDeroulantEquipe(equipe2)}
+        <input type="number" class="score-input" value="${score2}" placeholder="0">
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Fonction appelée si tu modifies manuellement un menu déroulant
+ */
+function gererChangementManuel(selectElement) {
+  const nouvelleEquipe = selectElement.value;
+  console.log("Équipe modifiée manuellement pour : " + nouvelleEquipe);
+  // Ici, tu peux ajouter la logique pour sauvegarder ce choix dans Google Apps Script
+}
